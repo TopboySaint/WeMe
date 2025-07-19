@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom'
 const Signup = () => {
     const navigate = useNavigate()
 const url = 'http://localhost:5010/signup'
-// axios.post(url)
 
 
 const formik = useFormik({
