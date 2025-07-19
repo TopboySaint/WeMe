@@ -44,7 +44,6 @@ app.post('/signup', (req, res)=>{
 .catch((err)=>{
     console.log('error saving user', err);
     res.status(501).json({message: 'user not saved'})
-
 })
 })
 
@@ -56,7 +55,6 @@ app.post('/signin', (req, res)=>{
 
  userModel.findOne({email: userData.email})
  .then((foundUser)=>{
-
 if(!foundUser || foundUser == null){
     res.status(401).send('No user found')
 }else{
@@ -75,7 +73,6 @@ if(!foundUser || foundUser == null){
 
 
 app.get('/dashboard', async(req, res)=>{
-    // res.send('dashboard')
     try{
         const users = await userModel.find({}, 'firstName lastName email')
         res.status(201).json(users)
