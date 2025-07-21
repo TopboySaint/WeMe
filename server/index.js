@@ -17,7 +17,7 @@ const connection = mongoose.connect(uri)
     console.log('error connecting to mongoose');  
 })
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
         firstName: {type: String, required: true},
         lastName: {type: String, required: true},
         email: {type: String, required: true, unique: true},

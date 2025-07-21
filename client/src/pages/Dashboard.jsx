@@ -6,14 +6,11 @@ const Dashboard = () => {
   const url = "http://localhost:5010/dashboard";
 
   useEffect(() => {
-    axios
-      .get(url)
-
+    axios.get(url)
       .then((res) => {
         setUsers(res.data);
           console.log(res.data);
       })
-
       .catch((err) => {
         console.error("Error fetching users:", err);
       });

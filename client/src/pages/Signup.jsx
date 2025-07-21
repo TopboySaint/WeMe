@@ -23,7 +23,6 @@ const formik = useFormik({
         axios.post(`${url}`, values) 
         .then((res)=>{
             console.log('response:', res);
-            
             if(res.status === 201){
                 navigate('/')
             } 
