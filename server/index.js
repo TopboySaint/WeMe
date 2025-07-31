@@ -10,6 +10,7 @@ app.use(express.json());
 const uri = process.env.URI;
 const port = process.env.PORT || 5010;
 const saltRounds = 10;
+const jwt = require('jsonwebtoken')
 
 const connection = mongoose
   .connect(uri)
@@ -106,14 +107,26 @@ app.post("/signin", (req, res) => {
     password: req.body.password,
   };
 
-  userModel
-    .findOne({ email: userData.email })
+  userModel.findOne({ email: userData.email })
     .then((foundUser) => {
       if (!foundUser || foundUser == null) {
         res.status(401).send("No user found");
       } else {
-        if (foundUser.password === userData.password) {
-          res.status(201).send(`Welcome ${foundUser.email}`);
+        const isMatch = bcrypt.compare(foundUser.password, userData.password)
+        if (isMatch) {
+          
+          jwt.sign({user: foundUser}, process.env.JWT_SECRET, {expiresIn: "10m"}, (err, token) =>{
+
+            if(err) {
+            return res.status(500).send('Error generating token');
+            }else{
+                console.log(token);
+                return res.status(200).json({message : 'User found and signed in', userToken: token});
+            }
+
+            })
+
+          // res.status(201).send(`Welcome ${foundUser.email}`);
         } else {
           res.status(401).send("Invalid password");
         }

@@ -24,7 +24,7 @@ const formik = useFormik({
         .then((res)=>{
             console.log('response:', res);
             if(res.status === 201){
-                navigate('/')
+                navigate('/signin')
             } 
         }) 
         .catch((err)=>{
