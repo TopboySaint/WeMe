@@ -11,6 +11,7 @@ const uri = process.env.URI;
 const port = process.env.PORT || 5010;
 const saltRounds = 10;
 const jwt = require('jsonwebtoken')
+const jwtDecode = require('jwt-decode')
 
 const connection = mongoose
   .connect(uri)
@@ -85,7 +86,7 @@ app.post("/signup", async(req, res) => {
         `,
       };
 
-     transporter.sendMail(mailOptions, (error, info) => {
+      transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           return res.status(500).send(`Error sending mail: ${error.message}`);
         }
@@ -136,6 +137,17 @@ app.post("/signin", (req, res) => {
       console.log(`${err}`);
     });
 });
+
+app.post('/decodetoken', (req,res)=>{
+    const token = req.body.token
+    jwt.verify(token, process.env.JWT_SECRET, (err, decode)=>{
+        if(err){
+            return res.status(401).send(`Invalid token`)
+        }
+        res.status(201).send(`${decode}`)
+    })
+})
+
 
 app.get("/dashboard", async (req, res) => {
   try {
