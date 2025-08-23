@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
   const navigate = useNavigate()
-  const url = 'http://localhost:5010/signup'
+  const url = 'https://onlyfanspro.onrender.com/signup'
 
 
 const formik = useFormik({

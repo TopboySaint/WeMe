@@ -3,7 +3,7 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
-  const url = "http://localhost:5010/dashboard";
+  const url = "https://onlyfanspro.onrender.com/dashboard";
 
   useEffect(() => {
     axios.get(url)
