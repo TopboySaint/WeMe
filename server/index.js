@@ -4,14 +4,11 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
-const bcrypt = require('bcrypt')
 app.use(cors());
 app.use(express.json());
 const uri = process.env.URI;
 const port = process.env.PORT || 5010;
-const saltRounds = 10;
-const jwt = require('jsonwebtoken')
-const jwtDecode = require('jwt-decode')
+
 
 const connection = mongoose
   .connect(uri)
@@ -38,10 +35,7 @@ app.get("/", (req, res) => {
 app.post("/signup", async(req, res) => {
   const { firstName, lastName, email, password } = req.body;
   try{
-
-      const hashedPassword = await bcrypt.hash(password, saltRounds)
-
-      const user = new userModel({ firstName, lastName, email, password: hashedPassword})
+  const user = new userModel({ firstName, lastName, email, password })
       await user.save()
 
       console.log("user saved successfully");
@@ -92,7 +86,7 @@ app.post("/signup", async(req, res) => {
         res.status(201).send(`Email send successfully: ${info}`);
       });
     
-      console.log("error saving user", err);
+      // console.log("error saving user");
       res.status(501).json({ message: "user not saved" });
 
     } catch(err){
@@ -110,7 +104,7 @@ app.post("/signin", async (req, res) => {
       return res.status(401).send("No user found");
     }
 
-    const isMatch = await bcrypt.compare(password, foundUser.password);
+  const isMatch = password === foundUser.password;
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
