@@ -64,12 +64,12 @@ app.post("/signup", async(req, res) => {
     <div style="max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); padding: 30px;">
       <h2 style="color: #2d72d9;">Welcome to Onlyfanspro !</h2>
       <p>Hi</p>
-      <p>Thank you for signing up for <strong>WeMe</strong>! 🎉</p>
+      <p>Thank you for signing up for <strong>Onlyfanspro</strong>! 🎉</p>
       <p>Your account has been created successfully, and you're now part of our community.</p>
       <p>You can now start exploring everything we have to offer.</p>
       <p>If you ever have questions or need support, feel free to reply to this email — we're here to help!</p>
       <p>Best regards,</p>
-      <p><strong>The WeMe Team</strong></p>
+      <p><strong>The Onlyfanspro Team</strong></p>
     </div>
     <div style="text-align: center; font-size: 12px; color: #888; margin-top: 40px;">
       &copy; 2025 WeMe. All rights reserved.
