@@ -36,7 +36,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signup", async(req, res) => {
-  // console.log(req.body);
   const { firstName, lastName, email, password } = req.body;
   try{
 
@@ -69,7 +68,7 @@ app.post("/signup", async(req, res) => {
   </head>
   <body style="font-family: Arial, sans-serif; background-color: #f6f9fc; margin: 0; padding: 0; color: #333;">
     <div style="max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); padding: 30px;">
-      <h2 style="color: #2d72d9;">Welcome to WeMe, [User's First Name]!</h2>
+      <h2 style="color: #2d72d9;">Welcome to Onlyfanspro !</h2>
       <p>Hi</p>
       <p>Thank you for signing up for <strong>WeMe</strong>! 🎉</p>
       <p>Your account has been created successfully, and you're now part of our community.</p>
@@ -102,51 +101,36 @@ app.post("/signup", async(req, res) => {
 });
 
 
-app.post("/signin", (req, res) => {
-  const userData = {
-    email: req.body.email,
-    password: req.body.password,
-  };
+app.post("/signin", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  userModel.findOne({ email: userData.email })
-    .then((foundUser) => {
-      if (!foundUser || foundUser == null) {
-        res.status(401).send("No user found");
-      } else {
-        const isMatch = bcrypt.compare(foundUser.password, userData.password)
-        if (isMatch) {
-          
-          jwt.sign({user: foundUser}, process.env.JWT_SECRET, {expiresIn: "10m"}, (err, token) =>{
+    const foundUser = await userModel.findOne({ email });
+    if (!foundUser) {
+      return res.status(401).send("No user found");
+    }
 
-            if(err) {
-            return res.status(500).send('Error generating token');
-            }else{
-                console.log(token);
-                return res.status(200).json({message : 'User found and signed in', userToken: token});
-            }
+    const isMatch = await bcrypt.compare(password, foundUser.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
 
-            })
-
-          // res.status(201).send(`Welcome ${foundUser.email}`);
-        } else {
-          res.status(401).send("Invalid password");
-        }
-      }
-    })
-    .catch((err) => {
-      console.log(`${err}`);
-    });
+    return res.status(200).json({ message: `Welcome ${foundUser.email}` });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
 });
 
-app.post('/decodetoken', (req,res)=>{
-    const token = req.body.token
-    jwt.verify(token, process.env.JWT_SECRET, (err, decode)=>{
-        if(err){
-            return res.status(401).send(`Invalid token`)
-        }
-        res.status(201).send(`${decode}`)
-    })
-})
+// app.post('/decodetoken', (req,res)=>{
+//     const token = req.body.token
+//     jwt.verify(token, process.env.JWT_SECRET, (err, decode)=>{
+//         if(err){
+//             return res.status(401).json({message: `Invalid token`})
+//         }
+//         res.status(201).json(`${decode}`)
+//     })
+// })
 
 
 app.get("/dashboard", async (req, res) => {

@@ -14,13 +14,25 @@ const Signin = () => {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
+    initialStatus: null,
+    onSubmit: (values, { setStatus, setSubmitting }) => {
+      setStatus(null);
       console.log("data", values);
       axios.post(url, values)
       .then((res)=>{
         console.log(res.data);
-        navigate('/dashboard')    
+        // Show any backend success message
+        if (res?.data?.message) {
+          setStatus({ type: 'success', message: res.data.message });
+        }
+        navigate('/dashboard')
       })
+      .catch((err)=>{
+        const msg = err?.response?.data?.message || err?.response?.data || err?.message || 'Request failed';
+        setStatus({ type: 'danger', message: msg });
+        console.log('Signin error:', msg);
+      })
+      .finally(()=> setSubmitting(false));
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email").required("eMail is required"),
@@ -53,6 +65,11 @@ const Signin = () => {
               <div className="card-body p-4 p-md-5">
                 <h3 className="fw-semibold mb-1">Welcome back</h3>
                 <p className="text-muted mb-4 small">Sign in to access exclusive content and messages.</p>
+                {formik.status?.message ? (
+                  <div className={`alert alert-${formik.status.type || 'info'} py-2 small`} role="alert">
+                    {formik.status.message}
+                  </div>
+                ) : null}
                 <form onSubmit={formik.handleSubmit} noValidate>
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label small">Email</label>
@@ -92,7 +109,7 @@ const Signin = () => {
                     <a href="#" className="small text-decoration-none" onClick={(e)=>e.preventDefault()}>Forgot password?</a>
                   </div>
                   <div className="d-grid">
-                    <button type="submit" className="btn btn-info text-dark fw-semibold rounded-pill">
+                    <button type="submit" disabled={formik.isSubmitting} className="btn btn-info text-dark fw-semibold rounded-pill">
                       <i className="bi bi-box-arrow-in-right me-1"></i>
                       Sign in
                     </button>

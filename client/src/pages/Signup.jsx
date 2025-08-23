@@ -18,20 +18,28 @@ const formik = useFormik({
         email : '',
         password : ''
     }, 
-    onSubmit: values => {
-        console.log('data', values);  
-        axios.post(`${url}`, values) 
-        .then((res)=>{
-            console.log('response:', res);
-            if(res.status === 201){
-                navigate('/signin')
-            } 
-        }) 
-        .catch((err)=>{
-            console.log(`${err.message}`);
-            alert('Not successful')   
-        })
-    },
+  initialStatus: null,
+  onSubmit: (values, { setStatus, setSubmitting }) => {
+    setStatus(null);
+    console.log('data', values);
+    axios.post(`${url}`, values)
+    .then((res)=>{
+      console.log('response:', res);
+      // optional success feedback
+      if (res?.data?.message) {
+        setStatus({ type: 'success', message: res.data.message });
+      }
+      if(res.status === 201){
+        navigate('/signin')
+      }
+    })
+    .catch((err)=>{
+      const msg = err?.response?.data?.message || err?.response?.data || err?.message || 'Request failed';
+      setStatus({ type: 'danger', message: msg });
+      console.log('Signup error:', msg);
+    })
+    .finally(()=> setSubmitting(false));
+  },
     validationSchema: Yup.object({
         firstName: Yup.string().required('First name is required'),
         lastName : Yup.string().required('Last name is required'),
@@ -91,6 +99,11 @@ const formik = useFormik({
                   <div className="p-4 p-md-5">
                     <h3 className="fw-semibold mb-1">Create your account</h3>
                     <p className="text-muted mb-4 small">Start your journey in minutes. It’s free.</p>
+                    {formik.status?.message ? (
+                      <div className={`alert alert-${formik.status.type || 'info'} py-2 small`} role="alert">
+                        {formik.status.message}
+                      </div>
+                    ) : null}
                     <form onSubmit={formik.handleSubmit} noValidate>
                       <div className="row g-3">
                         <div className="col-12 col-sm-6">
@@ -128,7 +141,7 @@ const formik = useFormik({
                           </div>
                         </div>
                         <div className="col-12 d-grid">
-                          <button type="submit" className="btn btn-info text-dark fw-semibold rounded-pill">
+                          <button type="submit" disabled={formik.isSubmitting} className="btn btn-info text-dark fw-semibold rounded-pill">
                             <i className="bi bi-person-plus me-1"></i>
                             Create account
                           </button>
