@@ -34,45 +34,87 @@ const Signin = () => {
 
 
   return (
-    <div className="container mt-5 col-lg-6 mx-auto shadow border py-4 rounded">
-        <h2 className="mb-4 text-center">Login</h2>
-      <form action="" onSubmit={formik.handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email address
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            name="email"
-            placeholder="Enter your email"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.email ? (
-            <span className="text-danger">{formik.errors.email}</span>
-          ) : null}
+    <div className="min-vh-100 d-flex flex-column" style={{background: 'linear-gradient(135deg, #0f172a 0%, #111827 35%, #0b1020 100%)'}}>
+      {/* Top nav / brand */}
+      <nav className="navbar navbar-dark bg-transparent py-3">
+        <div className="container">
+          <a className="navbar-brand d-flex align-items-center gap-2" href="#" onClick={(e)=>e.preventDefault()}>
+            <img src="/logo.svg" alt="OnlyFansPro" height="28" className="me-1" />
+            <span className="fw-bold" style={{letterSpacing: '.5px'}}>OnlyFansPro</span>
+          </a>
         </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            name="password"
-            placeholder="Enter your password"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.password ? (
-            <span className="text-danger">{formik.errors.password}</span>
-          ) : null}
+      </nav>
+
+      {/* Centered sign-in card */}
+      <div className="container flex-grow-1 d-flex align-items-center py-5">
+        <div className="row w-100 justify-content-center">
+          <div className="col-12 col-md-10 col-lg-6">
+            <div className="card shadow-lg border-0" style={{borderRadius: '1rem'}}>
+              <div className="card-body p-4 p-md-5">
+                <h3 className="fw-semibold mb-1">Welcome back</h3>
+                <p className="text-muted mb-4 small">Sign in to access exclusive content and messages.</p>
+                <form onSubmit={formik.handleSubmit} noValidate>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label small">Email</label>
+                    <div className="input-group input-group-sm">
+                      <span className="input-group-text bg-light"><i className="bi bi-envelope"></i></span>
+                      <input
+                        type="email"
+                        className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
+                        name="email"
+                        placeholder="you@example.com"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.email && formik.errors.email ? (
+                        <div className="invalid-feedback">{formik.errors.email}</div>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="mb-2">
+                    <label htmlFor="password" className="form-label small">Password</label>
+                    <div className="input-group input-group-sm">
+                      <span className="input-group-text bg-light"><i className="bi bi-lock"></i></span>
+                      <input
+                        type="password"
+                        className={`form-control ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
+                        name="password"
+                        placeholder="Your password"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.password && formik.errors.password ? (
+                        <div className="invalid-feedback">{formik.errors.password}</div>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content-end mb-4">
+                    <a href="#" className="small text-decoration-none" onClick={(e)=>e.preventDefault()}>Forgot password?</a>
+                  </div>
+                  <div className="d-grid">
+                    <button type="submit" className="btn btn-info text-dark fw-semibold rounded-pill">
+                      <i className="bi bi-box-arrow-in-right me-1"></i>
+                      Sign in
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary w-100">
-          Sign Up
-        </button>
-      </form>
+      </div>
+
+      {/* Footer tease */}
+      <footer className="py-4 bg-transparent">
+        <div className="container d-flex flex-wrap justify-content-between align-items-center gap-2 small text-white-50">
+          <div>© {new Date().getFullYear()} OnlyFansPro — Built for creators</div>
+          <div className="d-flex gap-3">
+            <a href="#" className="link-light text-decoration-none" onClick={(e)=>e.preventDefault()}>Help</a>
+            <a href="#" className="link-light text-decoration-none" onClick={(e)=>e.preventDefault()}>Safety</a>
+            <a href="#" className="link-light text-decoration-none" onClick={(e)=>e.preventDefault()}>Pricing</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

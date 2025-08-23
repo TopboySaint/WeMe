@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
 
 const userModel = mongoose.model("WeMe", userSchema);
 
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
   res.status(201).json({ message: "Let us connect" });
 });
 
